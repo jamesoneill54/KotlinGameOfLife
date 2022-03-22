@@ -8,7 +8,6 @@ import kotlin.test.assertEquals
 internal class GameOfLifeTest {
 
     @Test
-    @Disabled
     fun testCellWithFewerThanTwoNeighboursDies() {
         val currentGeneration = arrayOf(
             "........",
@@ -45,6 +44,52 @@ internal class GameOfLifeTest {
     }
 
     @Test
+    fun testCellWithGreaterThanThreeNeighboursDies() {
+        val currentGeneration = arrayOf(
+            "........",
+            "....**..",
+            "....**..",
+            "....*..."
+        )
+        val expectedNextGeneration = arrayOf(
+            "........",
+            "....**..",
+            "...*....",
+            "....**.."
+        )
+
+        assertContentEquals(expectedNextGeneration, GameOfLife.calculateNextGeneration(currentGeneration))
+    }
+
+    @Test
+    fun generatesCorrectNextGenerationOnRandomMap() {
+        val currentGeneration = arrayOf(
+            "***..*..",
+            "*****.**",
+            "*.....*.",
+            "*.**..*.",
+            "**.*...*",
+            "....*.**",
+            "***.***.",
+            "...*.**."
+        )
+        val expectedNextGeneration = arrayOf(
+            "*...***.",
+            "...**.**",
+            "*...*.*.",
+            "*.**..**",
+            "**.***.*",
+            "....*..*",
+            ".**.....",
+            ".***..*."
+        )
+
+        val actualNextGeneration = GameOfLife.calculateNextGeneration(currentGeneration)
+        assertContentEquals(expectedNextGeneration, actualNextGeneration,
+            "Expected: \n${expectedNextGeneration.joinToString("\n")}\n\nActual:\n${actualNextGeneration.joinToString("\n")}")
+    }
+
+    @Test
     fun returnsNewLineWithMiddleCellDead() {
         val currentGeneration = arrayOf(
             "...",
@@ -58,9 +103,9 @@ internal class GameOfLifeTest {
     @Test
     fun returnsNewLineWithMiddleCellStaysAlive() {
         val currentGeneration = arrayOf(
+            "*..",
             ".*.",
-            ".*.",
-            ".*."
+            "..*"
         )
 
         assertEquals(".*.", GameOfLife.getNextGenerationOfLine(1, currentGeneration))
